@@ -68,7 +68,7 @@ Repositories are organized by academic year and semester.
 | Group | Students | Repository |
 |-------|----------|------------|
 | **1** | Roy Tevel, Lior Levin | https://github.com/roytevel/roy-lior |
-| **2** | Hen Golyan, Noga Menahem | https://github.com/hengolyan/AI-Cyber-Defence-/tree/main |
+| **2** | Yerus Kanaw | https://github.com/Yeruskanaw/Labs.git |
 | **3** | Rom Horesh Aviv | https://github.com/AvivRomHoresh/Cyber-AI---AvivRomHoresh/tree/main |
 | **4** | Magen Hai Lakau, Irvin Rosenfeld | https://github.com/irvin-ro/AI-Driven-Cybersecurity |
 | **5** | Boaz Attiya, Lotem Kimchi | https://github.com/Snafuzila/AI-CyberSecurity.git |
