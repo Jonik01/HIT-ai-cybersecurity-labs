@@ -69,9 +69,9 @@ Repositories are organized by academic year and semester.
 |-------|----------|------------|
 | **1** | Roy Tevel, Lior Levin | https://github.com/roytevel/roy-lior |
 | **2** | Yerus Kanaw | https://github.com/Yeruskanaw/Labs.git |
-| **3** | Rom Horesh Aviv | https://github.com/AvivRomHoresh/Cyber-AI---AvivRomHoresh/tree/main |
-| **4** | Magen Hai Lakau, Irvin Rosenfeld | https://github.com/irvin-ro/AI-Driven-Cybersecurity |
-| **5** | Boaz Attiya, Lotem Kimchi | https://github.com/Snafuzila/AI-CyberSecurity.git |
+| **3** | Sagi Akshikar  | https://github.com/SAGISOS/AI-CyberSecurity.git |
+| **4** | Tamara Kranovich, Adi Tavakoli | https://github.com/Tamarak12/Tamara_and_Adi |
+| **5** | Lior Mashiach, Golan Katzav | https://github.com/liorma6/CyberAi |
 | **6** | Itay Fisher | https://github.com/itayfi01/AI_CyberSecurity |
 | **7** | Itay Matana | |
 | **8** | Liav Turjeman | https://github.com/liavt712-crypto |
@@ -87,6 +87,7 @@ Each link leads to a student repository containing:
 
 - Lab 1 – MITRE ATT&CK Mapping  
 - Lab 2 – Simple Anomaly Detection
+- Lab N - NNNNNN
 
 Content varies by group depending on chosen datasets, threat report,  
 pipeline configuration, and selected project topic.
