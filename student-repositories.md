@@ -77,7 +77,7 @@ Repositories are organized by academic year and semester.
 | **8** | Liran Vainshtein | https://github.com/liranv2001-ops/liran-cybersecurity.git   |
 | **9** | Rony Levy |  |
 | *10* | Lian Maor, Noy Mlynek | https://github.com/LianMaor/AI-Enhanced-Cybersecurity-Lian-Noy |
-
+| *11* | Elior Papo, Shira Rivlin | https://github.com/eliorpapo/Elior-Shira-CyberAI |
 
 ---
 
