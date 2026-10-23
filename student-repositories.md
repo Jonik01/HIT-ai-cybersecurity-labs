@@ -63,7 +63,9 @@ Repositories are organized by academic year and semester.
 | **9** | Shahar Laria | https://github.com/shacharlaria/HIT-ai-cybersecurity-labs |
 | *10* | Shahar Levi | https://github.com/shacharlevi953-wq/HIT-AI-Cybersecurity |
 
-## 📅 2026 – Fall Semester (Andrei Kojukhov)
+## 📅 2026 – Fall Semester 
+
+### Evening group (Andrei Kojukhov)
 
 | Group | Students | Repository |
 |-------|----------|------------|
@@ -78,6 +80,12 @@ Repositories are organized by academic year and semester.
 | **9** | Rony Levy |  |
 | *10* | Lian Maor, Noy Mlynek | https://github.com/LianMaor/AI-Enhanced-Cybersecurity-Lian-Noy |
 | *11* | Elior Papo, Shira Rivlin | https://github.com/eliorpapo/Elior-Shira-CyberAI |
+
+### Morning group (Viacheslav Nefedov)
+
+| Group | Students | Repository |
+|-------|----------|------------|
+| **1** | Ofek Drori, David Voloshin | [OfekDr1/Cybersecurity-CTI-](https://github.com/OfekDr1/Cybersecurity-CTI-) |
 
 ---
 
