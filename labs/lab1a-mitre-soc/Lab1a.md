@@ -1,184 +1,81 @@
-# Lab 1a — Raw Log Analysis, MITRE ATT&CK Mapping, and Container-Based Detection
+# Laboratory 1a
 
-## Course Context
+## Raw Security Logs → Rule-Based Detection → MITRE ATT&CK → SOC Dashboard
 
-This laboratory exercise is conducted **physically in the computer laboratory**. Students work on the laboratory computers under instructor guidance.
+**Student handout | 60 minutes | Individual or pairs | Windows PowerShell + Docker Desktop**
 
-The exercise does **not** require cloud access, an LLM, an AI agent, Kali Linux, a vulnerable target, or real attack execution.
+Repository: https://github.com/melofon/HIT-ai-cybersecurity-labs/tree/main/labs/lab1a-mitre-soc
 
-The purpose of Lab 1a is to introduce a simple and transparent cybersecurity workflow:
+# 1. Learning objectives
 
-```text
-Raw security data
-        ↓
-Detection rule
-        ↓
-SOC finding
-        ↓
-MITRE ATT&CK mapping
-        ↓
-Containerized execution
-```
+By the end of this laboratory, you should be able to:
 
-## Duration
+1. Run the supplied detector and SOC dashboard using Docker Compose.
+2. Inspect raw `security.log` records and explain how detection rules operate.
+3. Distinguish T1110 Brute Force and T1046 Network Service Discovery from confirmed attacks.
+4. Verify technique metadata using the bundled MITRE ATT&CK STIX knowledge file.
+5. Explain why repeated events must be interpreted by source and context.
+6. Observe how changing raw logs changes detector output.
+7. Use an optional simulator to observe continuously changing synthetic telemetry.
+8. Document reproducible observations, uncertainty, and the limitations of simple rules.
 
-**60 minutes**
+# 2. Actual project architecture
 
-## Lab Format
+This laboratory uses the supplied GitHub project.
 
-- Physical classroom laboratory
-- Individual or pair work
-- Instructor-guided execution
-- One Docker container
-- Local files only
-- No external API keys
-- No cloud services
-- No offensive security tools
+It does **not** require Kali Linux, DVWA, Nmap, a vulnerable target, cloud services, an LLM, or an AI agent.
 
-## Learning Objectives
-
-By the end of the lab, students should be able to:
-
-1. Read a simple raw security log.
-2. Distinguish normal and suspicious events.
-3. Identify repeated failed login attempts.
-4. Identify basic network scanning activity.
-5. Map suspicious activity to MITRE ATT&CK techniques.
-6. Run a simple detection script inside a Docker container.
-7. Explain why containers and virtualization are useful in cybersecurity laboratories, even when cloud services are not used.
-
-# 1. Why Containers and Virtualization Are Introduced
-
-Although this lab runs locally on laboratory computers, containers are introduced because they are widely used in modern cybersecurity, software engineering, DevOps, and cloud-native systems.
-
-The goal is not to simulate a cloud environment. The goal is to teach students how an application can run inside an isolated and reproducible environment.
-
-## 1.1 Reproducibility
-
-Without containers, students may have different Python versions, installed packages, operating-system settings, file paths, permissions, and local configurations.
-
-A Docker container provides the same execution environment for all students:
-
-```text
-Same Dockerfile
-      ↓
-Same runtime
-      ↓
-Same expected behavior
-```
-
-This makes laboratory work easier to support and grade.
-
-## 1.2 Isolation
-
-The detection program runs in its own environment instead of directly modifying the host computer.
-
-In this lab:
-
-- the log folder is mounted as read-only;
-- the detector cannot change the original evidence;
-- the output is written to a separate folder.
-
-Isolation is important in cybersecurity because security tools often process untrusted data.
-
-## 1.3 Safe Experimentation
-
-Cybersecurity laboratories frequently involve suspicious files, simulated attacks, vulnerable applications, network tools, and monitoring systems.
-
-This introductory lab uses only harmless text logs, but containers establish a safe working method that will be useful in later exercises.
-
-## 1.4 Portability
-
-A containerized project can run on a laboratory computer, personal laptop, university server, virtual machine, or cloud platform.
-
-The same project can move between environments with minimal changes.
-
-## 1.5 Relation to Cloud Computing
-
-Cloud platforms often use containers, but containers are not limited to the cloud.
-
-In this laboratory, Docker is used locally to demonstrate the same principles found in cloud-native environments:
-
-- isolated services;
-- standard runtime environments;
-- mounted storage;
-- reproducible deployment;
-- separation between application and host system.
-
-> Containers are a deployment and isolation technology. Cloud computing is one possible place where containers run, but not the only one.
-
-# 2. Lab Scenario
-
-A small SOC team receives a raw security log.
-
-The log contains:
-
-- normal login activity;
-- repeated failed login attempts;
-- a network scan;
-- normal logout activity.
-
-Students first inspect the raw log manually. They then run a Python detector inside Docker.
-
-The detector identifies two supported patterns:
-
-1. Possible brute-force login activity.
-2. Network service discovery.
-
-# 3. MITRE ATT&CK Techniques Used
-
-| Activity | MITRE ATT&CK Technique | Tactic |
+| Service | Role | Relevant behavior |
 |---|---|---|
-| Repeated failed login attempts | **T1110 — Brute Force** | Credential Access |
-| Network scan | **T1046 — Network Service Discovery** | Discovery |
+| `detector` | Reads logs and writes `findings.json` | Rescans every 5 seconds |
+| `dashboard` | Displays findings and raw logs | `http://localhost:8000` |
+| `simulator` | Appends synthetic events | Optional Compose profile; ~10-second interval |
 
-The detector is intentionally simple and rule-based.
-
-It does not prove that an attack occurred. It produces a security finding that requires interpretation.
-
-# 4. Project Structure
-
-Create the following structure:
+Data flow:
 
 ```text
-lab1a/
-├── Dockerfile
-├── docker-compose.yml
-├── detector.py
-├── logs/
-│   └── security.log
-└── output/
+logs/security.log
+        ↓
+detector rules
+        ↓
+candidate MITRE technique ID
+        ↓
+local MITRE STIX lookup
+        ↓
+output/findings.json
+        ↓
+SOC dashboard
 ```
 
-# 5. Step 1 — Create the Project Folder
+The detector is deterministic and rule-based, not an AI/LLM system.
 
-Open a terminal on the laboratory computer.
+# 3. Prerequisites and safety
 
-## Windows PowerShell
+Required:
 
-```powershell
-mkdir lab1a
-cd lab1a
-mkdir logs
-mkdir output
-```
+- Docker Desktop running
+- Docker Compose v2
+- Windows PowerShell
+- Browser
+- Local copy of the complete project folder
 
-## Linux or macOS
+Safety rules:
 
-```bash
-mkdir -p lab1a/logs lab1a/output
-cd lab1a
-```
+- Use only supplied or synthetic log records.
+- Do not scan real networks or HIT infrastructure.
+- Do not use real passwords or personal data.
+- Keep the optional simulator stopped until the final activity.
+- Back up the clean baseline before experiments.
 
-# 6. Step 2 — Create the Raw Security Log
+# 4. Clean baseline
 
-Create:
+The repository includes:
 
 ```text
 logs/security.log
 ```
 
-Insert:
+It should initially contain exactly:
 
 ```text
 2026-07-11T09:00:10 INFO User student logged in successfully from 172.18.0.10
@@ -189,409 +86,221 @@ Insert:
 2026-07-11T09:07:33 INFO User administrator logged out
 ```
 
-# 7. Step 3 — Manual Log Analysis
-
-Before running code, inspect the raw log and answer:
-
-1. Which events appear normal?
-2. Which events appear suspicious?
-3. Which source IP generated the failed login attempts?
-4. How many failed login attempts were recorded?
-5. Which source IP performed the network scan?
-6. Which ports were scanned?
-7. Which MITRE ATT&CK technique matches the repeated failed logins?
-8. Which MITRE ATT&CK technique matches the network scan?
-
-## Expected observations
-
-| Event | Interpretation |
-|---|---|
-| Successful student login | Normal activity |
-| Three failed root login attempts | Possible brute-force activity |
-| Network scan against several ports | Possible network service discovery |
-| Administrator logout | Normal activity |
-
-# 8. Step 4 — Create the Detection Script
-
-Create:
-
-```text
-detector.py
-```
-
-```python
-from __future__ import annotations
-
-import json
-from collections import Counter
-from pathlib import Path
-
-LOG_PATH = Path("/data/security.log")
-OUTPUT_PATH = Path("/output/findings.json")
-FAILED_PASSWORD_THRESHOLD = 3
-
-
-def extract_source_ip(line: str) -> str:
-    if " from " not in line:
-        return "unknown"
-    return line.split(" from ", 1)[1].split()[0]
-
-
-def analyze_log(log_path: Path) -> list[dict[str, object]]:
-    if not log_path.exists():
-        raise FileNotFoundError(f"Log file not found: {log_path}")
-
-    lines = log_path.read_text(encoding="utf-8").splitlines()
-    findings: list[dict[str, object]] = []
-    failed_password_sources: Counter[str] = Counter()
-
-    for line_number, line in enumerate(lines, start=1):
-        normalized = line.lower()
-
-        if "failed password" in normalized:
-            source_ip = extract_source_ip(line)
-            failed_password_sources[source_ip] += 1
-
-        if "network scan detected" in normalized:
-            source_ip = extract_source_ip(line)
-            findings.append(
-                {
-                    "finding": "Possible network service discovery",
-                    "source_ip": source_ip,
-                    "mitre_technique": "T1046",
-                    "mitre_name": "Network Service Discovery",
-                    "tactic": "Discovery",
-                    "severity": "Medium",
-                    "evidence": line,
-                    "line_number": line_number,
-                }
-            )
-
-    for source_ip, count in failed_password_sources.items():
-        if count >= FAILED_PASSWORD_THRESHOLD:
-            findings.append(
-                {
-                    "finding": "Possible brute-force login attempt",
-                    "source_ip": source_ip,
-                    "failed_attempts": count,
-                    "mitre_technique": "T1110",
-                    "mitre_name": "Brute Force",
-                    "tactic": "Credential Access",
-                    "severity": "High",
-                    "evidence": (
-                        f"{count} failed password events were detected "
-                        f"from {source_ip}."
-                    ),
-                }
-            )
-
-    return findings
-
-
-def print_findings(findings: list[dict[str, object]]) -> None:
-    print("=" * 60)
-    print("LAB 1A — SECURITY DETECTION REPORT")
-    print("=" * 60)
-
-    if not findings:
-        print("No supported suspicious activity was detected.")
-        return
-
-    for number, finding in enumerate(findings, start=1):
-        print(f"\nFinding {number}")
-        print(f"Activity: {finding['finding']}")
-        print(f"Source IP: {finding['source_ip']}")
-        print(
-            f"MITRE ATT&CK: {finding['mitre_technique']} - "
-            f"{finding['mitre_name']}"
-        )
-        print(f"Tactic: {finding['tactic']}")
-        print(f"Severity: {finding['severity']}")
-        print(f"Evidence: {finding['evidence']}")
-
-
-def save_findings(
-    findings: list[dict[str, object]],
-    output_path: Path,
-) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(findings, indent=2),
-        encoding="utf-8",
-    )
-
-
-def main() -> None:
-    try:
-        findings = analyze_log(LOG_PATH)
-        print_findings(findings)
-        save_findings(findings, OUTPUT_PATH)
-        print(f"\nResults saved to: {OUTPUT_PATH}")
-    except (FileNotFoundError, PermissionError) as exc:
-        print(f"Error: {exc}")
-        raise SystemExit(1) from exc
-
-
-if __name__ == "__main__":
-    main()
-```
-
-# 9. Step 5 — Create the Dockerfile
-
-Create:
-
-```text
-Dockerfile
-```
-
-```dockerfile
-FROM python:3.12-slim
-
-WORKDIR /app
-
-COPY detector.py /app/detector.py
-
-CMD ["python", "/app/detector.py"]
-```
-
-# 10. Step 6 — Create Docker Compose
-
-Create:
-
-```text
-docker-compose.yml
-```
-
-```yaml
-services:
-  detector:
-    build: .
-    container_name: mitre-log-detector
-    volumes:
-      - ./logs:/data:ro
-      - ./output:/output
-```
-
-## Mounted folders
-
-`./logs:/data:ro` means:
-
-- `./logs` is the host folder;
-- `/data` is the folder inside the container;
-- `ro` means read-only.
-
-The detector can read the log but cannot modify it.
-
-`./output:/output` means:
-
-- the container writes its results to `/output`;
-- the results are saved in the host `output` folder.
-
-# 11. Step 7 — Build and Run
-
-```bash
-docker compose up --build
-```
-
-Expected output:
-
-```text
-============================================================
-LAB 1A — SECURITY DETECTION REPORT
-============================================================
-
-Finding 1
-Activity: Possible network service discovery
-Source IP: 172.18.0.7
-MITRE ATT&CK: T1046 - Network Service Discovery
-Tactic: Discovery
-Severity: Medium
-
-Finding 2
-Activity: Possible brute-force login attempt
-Source IP: 172.18.0.5
-MITRE ATT&CK: T1110 - Brute Force
-Tactic: Credential Access
-Severity: High
-```
-
-Inspect:
-
-```text
-output/findings.json
-```
-
-# 12. Step 8 — Student Experiments
-
-## Experiment A — Below the threshold
-
-Keep only two failed-password entries.
-
-Expected result:
-
-- no brute-force finding;
-- the network-scan finding remains.
-
-## Experiment B — Different source IP addresses
-
-Create three failed login events, each from a different IP address.
-
-Expected result:
-
-- no brute-force finding for any individual source.
-
-## Experiment C — Add another scan
-
-Add:
-
-```text
-2026-07-11T09:10:00 INFO Network scan detected from 172.18.0.9 against ports 21,22,23,25
-```
-
-Expected result:
-
-- two T1046 findings.
-
-# 13. Discussion Questions
-
-1. Why does a security log require interpretation?
-2. Why is a detection finding not the same as proof of an attack?
-3. Why is the original log mounted as read-only?
-4. What advantages does Docker provide in a physical laboratory?
-5. How could this detector be improved?
-6. What additional logs would help confirm brute-force activity?
-7. What could cause a false positive?
-8. How does MITRE ATT&CK help SOC teams communicate?
-
-# 14. Student Deliverable
-
-Submit:
-
-```text
-lab1a/
-├── Dockerfile
-├── docker-compose.yml
-├── detector.py
-├── logs/
-│   └── security.log
-└── output/
-    └── findings.json
-```
-
-Also submit `analysis.txt` containing:
-
-- detected activity;
-- source IP;
-- evidence;
-- MITRE ATT&CK technique;
-- tactic;
-- a short explanation of why Docker was used.
-
-# 15. Suggested Assessment
-
-| Criterion | Weight |
-|---|---:|
-| Project runs successfully in Docker | 25% |
-| Raw log is processed correctly | 20% |
-| Brute-force detection works | 15% |
-| Network-scan detection works | 15% |
-| MITRE ATT&CK mapping is correct | 15% |
-| Containerization explanation is clear | 5% |
-| Submission structure is complete | 5% |
-
-# 16. Instructor Teaching Plan
-
-| Time | Activity |
-|---:|---|
-| 0–10 min | Explain raw logs, SOC findings, and MITRE ATT&CK |
-| 10–18 min | Explain why Docker is used in a physical laboratory |
-| 18–28 min | Manual inspection of the raw log |
-| 28–38 min | Review the Python detection rules |
-| 38–48 min | Build and run the container |
-| 48–56 min | Student experiments |
-| 56–60 min | Review results and submission requirements |
-
-# 17. Important Boundaries
-
-This laboratory does not include:
-
-- real attack execution;
-- Kali Linux;
-- DVWA;
-- Nmap;
-- cloud deployment;
-- an LLM;
-- an AI agent;
-- external APIs;
-- machine-learning model training.
-
-The laboratory focuses on:
-
-```text
-Raw log
-   ↓
-Transparent rule
-   ↓
-Security finding
-   ↓
-MITRE ATT&CK mapping
-   ↓
-Reproducible container execution
-```
-
-# 18. Summary
-
-Lab 1a introduces three foundational ideas:
-
-1. Security analysis begins with raw data.
-2. MITRE ATT&CK provides a shared language for classifying behavior.
-3. Containers provide isolation, consistency, and reproducibility even in a local physical laboratory.
-
-This foundation supports later laboratories involving richer telemetry, attack simulation, cloud-native security, machine learning, and AI-augmented SOC environments.
-
-
-# 19. MITRE ATT&CK Knowledge-File Integration
-
-The detection rules now produce candidate technique IDs such as `T1110` and `T1046`. The program does not hard-code the technique name and tactic. Instead, it loads a local STIX knowledge bundle and resolves the ID to its ATT&CK metadata.
-
-```text
-Raw log
-   ↓
-Detection rule assigns candidate ID
-   ↓
-Local ATT&CK STIX lookup
-   ↓
-Technique name, tactic, URL, and STIX identifier
-   ↓
-Enriched SOC finding
-```
-
-The project includes a small offline file containing the two techniques required by this lab. The full official Enterprise ATT&CK bundle can be downloaded with `download_attack_data.ps1`.
-
-# Dashboard Extension
-
-The project includes a simple local SOC dashboard so that students can inspect the detector output visually.
-
-Start both the detector and dashboard:
+Expected initial dashboard:
+
+- Total findings: **2**
+- High: **1**
+- Medium: **1**
+- T1110 from `172.18.0.5`
+- T1046 from `172.18.0.7`
+
+# 5. Setup and verification — 10 minutes
 
 ```powershell
+docker version
+docker compose config
 docker compose up --build -d
+docker compose ps
 ```
 
-Open the dashboard in a browser:
+Open:
 
 ```text
 http://localhost:8000
 ```
 
-The dashboard shows summary counts, severity, source IPs, MITRE ATT&CK mappings, knowledge-file resolution, evidence, and the original raw log.
-
-After changing `logs/security.log`, rerun only the detector:
+Inspect logs:
 
 ```powershell
-docker compose run --rm detector
+docker compose logs --tail=30 detector
+docker compose logs --tail=30 dashboard
 ```
 
-The dashboard reloads `output/findings.json` automatically every five seconds.
+Inspect findings:
 
-The dashboard is also local and containerized. It does not require a cloud service or Internet connection, except when students choose to open the external MITRE ATT&CK links.
+```powershell
+Get-Content .\output\findings.json
+```
+
+Important: the detector rescans automatically every 5 seconds. You do not need to restart Docker after ordinary log edits.
+
+# 6. Activity A — Inspect evidence — 10 minutes
+
+Open:
+
+```text
+logs/security.log
+output/findings.json
+```
+
+Record:
+- `finding_count`
+- source IPs
+- MITRE technique IDs
+- severity
+- evidence
+- lookup status
+
+Trace each baseline finding back to the exact raw log record.
+
+# 7. Activity B — Understand the rules — 10 minutes
+
+## T1110
+
+The detector counts lines containing `Failed password` by source IP.
+
+Three or more failures from the **same source IP** produce a High-severity candidate T1110 finding.
+
+Default threshold:
+
+```text
+FAILED_PASSWORD_THRESHOLD=3
+```
+
+There is no time window.
+
+## T1046
+
+Any line containing `Network scan detected` produces a Medium-severity candidate T1046 finding.
+
+Inspect `detector.py` and identify:
+- `FAILED_PASSWORD_THRESHOLD`
+- `SCAN_INTERVAL_SECONDS`
+- source-IP extraction
+- candidate technique assignment
+
+Explain why a rule match is not the same as confirmed attacker intent.
+
+# 8. Activity C — Controlled changes and rescanning — 15 minutes
+
+Back up the baseline:
+
+```powershell
+Copy-Item .\logs\security.log .\logs\security.log.bak
+```
+
+Ensure the simulator is stopped:
+
+```powershell
+docker compose stop simulator
+```
+
+After each change: save, wait at least 5 seconds, refresh the dashboard, and compare predicted vs actual results.
+
+## C1 — Below threshold
+
+Remove one of the three failed-password lines for `172.18.0.5`.
+
+Expected:
+- T1110 disappears
+- T1046 remains
+- total findings becomes 1
+
+## C2 — Three failures from three different IPs
+
+Example:
+
+```text
+2026-10-22T10:00:00Z WARN Failed password for test from 192.0.2.51 port 40001 ssh2
+2026-10-22T10:00:02Z WARN Failed password for test from 192.0.2.52 port 40002 ssh2
+2026-10-22T10:00:04Z WARN Failed password for test from 192.0.2.53 port 40003 ssh2
+```
+
+Expected:
+- no T1110 for these three records
+
+## C3 — Threshold crossing
+
+Append:
+
+```text
+2026-10-22T10:01:00Z WARN Failed password for test from 192.0.2.55 port 40001 ssh2
+2026-10-22T10:01:02Z WARN Failed password for test from 192.0.2.55 port 40002 ssh2
+2026-10-22T10:01:04Z WARN Failed password for test from 192.0.2.55 port 40003 ssh2
+```
+
+Expected:
+- new T1110 for `192.0.2.55`
+
+## C4 — Add another scan
+
+Append:
+
+```text
+2026-10-22T10:02:00Z INFO Network scan detected from 192.0.2.77 against ports 22,80,443
+```
+
+Expected:
+- new T1046 finding
+
+# 9. Activity D — MITRE knowledge and optional simulator — 10 minutes
+
+Inspect:
+
+```text
+mitre/enterprise-attack-mini.json
+```
+
+The detector enriches candidate IDs with technique names, tactics, URLs, descriptions, and STIX metadata.
+
+Optional full Enterprise ATT&CK download:
+
+```powershell
+.\download_attack_data.ps1
+```
+
+Then start the simulator:
+
+```powershell
+docker compose --profile simulation up --build -d
+docker compose logs --tail=20 simulator
+```
+
+Observe changing logs and finding counts.
+
+The simulator is synthetic and nondeterministic.
+
+Stop it before final evidence collection:
+
+```powershell
+docker compose stop simulator
+```
+
+# 10. Deliverable and cleanup — 5 minutes
+
+Submit one PDF or TXT report with:
+
+1. Docker verification and dashboard screenshot.
+2. Initial clean-baseline finding count.
+3. Final finding count before simulator use.
+4. A two-row evidence → rule → technique → tactic → uncertainty table.
+5. Results of C1–C4: changed lines, predicted result, actual result, explanation.
+6. A 100–150 word SOC narrative distinguishing facts, rule-based interpretation, and uncertainty.
+
+Restore the clean baseline:
+
+```powershell
+Copy-Item .\logs\security.log.bak .\logs\security.log -Force
+```
+
+Stop the lab:
+
+```powershell
+docker compose --profile simulation down
+```
+
+# 11. Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| Docker client works but no server section | Start Docker Desktop |
+| Dashboard does not load | `docker compose ps`, dashboard logs, port 8000 |
+| No `findings.json` | Detector logs, output directory, wait for scan |
+| No new findings | Log path, exact trigger text, source-IP grouping |
+| MITRE lookup missing | `mitre/enterprise-attack-mini.json` and volume mount |
+| Counts keep changing | Stop the simulator |
+| Many findings appear at startup | Restore the clean six-line baseline |
+
+# 12. Key interpretation rule
+
+MITRE ATT&CK mapping identifies behavior consistent with a technique. It does not establish attacker identity, intent, successful compromise, or complete incident context.
