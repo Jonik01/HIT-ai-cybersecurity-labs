@@ -70,7 +70,7 @@ Repositories are organized by academic year and semester.
 | Group | Students | Repository |
 |-------|----------|------------|
 | **1** | Roy Tevel, Lior Levin | https://github.com/roytevel/roy-lior |
-| **2** | Yerus Kanaw | https://github.com/Yeruskanaw/Labs.git |
+| **2** | Yerus Kanaw, Yuval David | https://github.com/Yeruskanaw/Labs.git |
 | **3** | Sagi Akshikar  | https://github.com/SAGISOS/AI-CyberSecurity.git |
 | **4** | Tamara Kranovich, Adi Tavakoli | https://github.com/Tamarak12/Tamara_and_Adi |
 | **5** | Lior Mashiach, Golan Katzav | https://github.com/liorma6/CyberAi |
@@ -81,7 +81,7 @@ Repositories are organized by academic year and semester.
 | *10* | Lian Maor, Noy Mlynek | https://github.com/LianMaor/AI-Enhanced-Cybersecurity-Lian-Noy |
 | *11* | Elior Papo, Shira Rivlin | https://github.com/eliorpapo/Elior-Shira-CyberAI |
 | *12* | Hodaya Edri, Mali Alali | https://github.com/HodayaEdri/CyberSecurity- |
-| *13* | Noam Ohana, Ofek Valdman | https://github.com/HodayaEdri/CyberSecurity- |
+| *13* | Noam Ohana, Ofek Valdman | https://github.com/noamoh2/AI-Cybersecurity-Noam-Ofek |
 
 ### Morning group (Viacheslav Nefedov)
 
