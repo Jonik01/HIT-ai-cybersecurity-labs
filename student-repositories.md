@@ -80,6 +80,8 @@ Repositories are organized by academic year and semester.
 | **9** | Rony Levy, Noa Cohen | https://github.com/ronylevy32/hit-cybersecurityAI/tree/main |
 | *10* | Lian Maor, Noy Mlynek | https://github.com/LianMaor/AI-Enhanced-Cybersecurity-Lian-Noy |
 | *11* | Elior Papo, Shira Rivlin | https://github.com/eliorpapo/Elior-Shira-CyberAI |
+| *12* | Hodaya Edri, Mali Alali | https://github.com/HodayaEdri/CyberSecurity- |
+| *13* | Noam Ohana, Ofek Valdman | https://github.com/HodayaEdri/CyberSecurity- |
 
 ### Morning group (Viacheslav Nefedov)
 
