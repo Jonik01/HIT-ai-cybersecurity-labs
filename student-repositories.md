@@ -82,6 +82,7 @@ Repositories are organized by academic year and semester.
 | *11* | Elior Papo, Shira Rivlin | https://github.com/eliorpapo/Elior-Shira-CyberAI |
 | *12* | Hodaya Edri, Mali Alali | https://github.com/HodayaEdri/CyberSecurity- |
 | *13* | Noam Ohana, Ofek Valdman | https://github.com/noamoh2/AI-Cybersecurity-Noam-Ofek |
+| *14* | Liad Pinhas | https://github.com/LiadPinhas/cyber_sec_course_sg_sa |
 
 ### Morning group (Viacheslav Nefedov)
 
