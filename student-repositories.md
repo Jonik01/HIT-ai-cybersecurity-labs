@@ -89,6 +89,7 @@ Repositories are organized by academic year and semester.
 | Group | Students | Repository |
 |-------|----------|------------|
 | **1** | Ofek Drori, David Voloshin | [OfekDr1/Cybersecurity-CTI-](https://github.com/OfekDr1/Cybersecurity-CTI-) |
+| **2** | Jonathan Bronfman | [Jonik01/AI-Driven-Cybersecurity-Course](https://github.com/Jonik01/AI-Driven-Cybersecurity-Course) |
 
 ---
 
